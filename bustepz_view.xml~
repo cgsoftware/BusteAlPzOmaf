@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<openerp>
+  <data>
+
+
+    <record model="ir.actions.act_window" id="action_buste_template_form">
+      <field name="name">Template Buste PZ</field>
+      <field name="res_model">buste.template.head</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem action="action_buste_template_form" id="menu_buste_template_tree" parent="base.menu_product" />
+    
+    <!-- Tree View  Numeri Progressivi Documenti -->
+    
+    <record id="buste_template_view_tree" model="ir.ui.view">
+      <field name="name">buste.template.tree</field>
+      <field name="model">buste.template.head</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string="Tabella Template Buste al PZ">
+          <field name="name" select="1"/>
+	  <field name="descrizione" select="1" />
+	  <field name='categ_id' select="1" />
+        </tree>
+      </field>
+    </record>
+    
+    <record id="buste_template_form" model="ir.ui.view">
+      <field name="name">buste.template.form</field>
+      <field name="model">buste.template.head</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Template Buste al PZ">
+          <group col="6" colspan="4">
+            <field name="name" select="1" />
+	    <field name="id" invisible="1" />
+	    <field name="descrizione" select="1" />	
+	    <field name='categ_id' required="1" />
+          </group>     
+          <newline/>
+          <separator string="Dettagli" colspan="4"/>
+	  <notebook colspan="4">
+	    <page string="Varianti">
+          <field name="righe_varianti" nolabel="1" mode="tree,form" string="Varianti">
+            <tree editable="bottom"  string="Variante">
+              <field name="name" size='150' />
+	      <field name="descrizione_var" size='150' />
+	      <field name="prezzo_al_kg" size='150' /> 
+            </tree>
+            <form>
+               <field name="name" size='150' />
+	      <field name="descrizione_var" size='150' />
+	      <field name="prezzo_al_kg" size='150' /> 
+           </form>
+          </field> 
+	</page>
+	  <page string="Materie Prime">
+	    <field name="righe_materie_prime" nolabel="1" mode="tree,form" string="Materie Prime">
+            <tree editable="bottom"  string="Materie Prime">
+              <field name="name" size='150'   domain="[('codice_busta_id','=',parent.id)]" />
+	      <field name="product_material_id" size='150' />
+	      <field name="tipo_calcolo" size='150' /> 
+	      <field name="moltip" size='150' /> 
+            </tree>
+            <form>
+              <field name="name" size='150' domain="[('codice_busta_id','=',parent.id)]" />
+	      <field name="product_material_id" size='150' />
+	      <field name="tipo_calcolo" size='150' /> 
+	      <field name="moltip" size='150' /> 
+	    </form>
+      </field>
+      </page>
+    </notebook>
+  </form>
+  </field>
+
+</record>
+    
+<!-- 
+ domain="[('codice_busta_id','=',parent.id)]"
+-->
+    
+  <record id="product_product_buste_form_view" model="ir.ui.view">
+      <field name="name">product.product.buste.form.view</field>
+      <field name="model">product.product</field>
+      <field name="type">form</field>
+      <field name="inherit_id" ref="product.product_normal_form_view" />
+      <field name="arch" type="xml">
+  		<notebook position="inside">
+					<page string="Misure Buste Al Pz">
+						<field name="production_peso" size="10"/>
+						<field name="pz_x_collo" size="10"/>
+							<newline />
+					</page>
+		</notebook>
+      </field>
+    </record>    
+
+  
+ 
+    
+    
+    
+    </data>
+</openerp>
