@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
   <data>
 
@@ -90,9 +90,11 @@
       <field name="arch" type="xml">
   		<notebook position="inside">
 					<page string="Misure Buste Al Pz">
-						<field name="production_peso" size="10"/>
-						<field name="pz_x_collo" size="10"/>
-							<newline />
+						<field name="peso_specifico" size="10"/>
+						<field name="larg" size="10"/>
+						<field name="lung" size="10"/>
+						<field name="spess" size="10"/>
+					<newline />
 					</page>
 		</notebook>
       </field>

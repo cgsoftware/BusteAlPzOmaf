@@ -38,6 +38,7 @@ class product_product(osv.osv):
         'larg': fields.float('Larghezza', required=False, digits=(11, 5)),
         'lung': fields.float('Lunghezza', required=False, digits=(11, 5)),
         'spess': fields.float('Spessore', required=False, digits=(11, 5)),
+        'cod_var':fields.many2one('buste.template.varianti', 'Variante di Riferimento Busta', required=True, ondelete='cascade', select=True, readonly=True),
          }
     
 product_product() 

@@ -29,7 +29,8 @@
     "depends" : ['base', 'product'],
     "update_xml" : [
                     'security/ir.model.access.csv',
-                    'bustepz_view.xml'
+                    'bustepz_view.xml',
+                    'wizard/product_buste.xml',
                     ],
     'website': 'http://www.cgsoftware.it',
     'installable': True,

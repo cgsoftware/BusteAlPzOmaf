@@ -204,7 +204,7 @@ class  buste_template_varianti(osv.osv):
     _description = 'Varianti che la busta può assumere'
     _name = "buste.template.varianti"
     _columns = {
-                'codice_busta_id':  fields.many2one('buste.template.head', 'Testa Template Busta', required=True, ondelete='cascade', select=True, readonly=True),
+                'codice_busta_id': fields.many2one('buste.template.head', 'Testa Template Busta', required=True, ondelete='cascade', select=True, readonly=True),
                 'name': fields.char('Codice Variante', size=64, required=True, translate=True, select=True),
                 'descrizione_var': fields.char('Descrizione', size=128, required=False, translate=True, select=False),
                 'prezzo_al_kg': fields.float('Prezzo al KG', digits_compute=dp.get_precision('Sale Price'), help="Prezzo al Kg che sara utilizzato per il calcolo del prezzo di vendita"),
