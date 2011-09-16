@@ -58,7 +58,7 @@ class crea_buste(osv.osv_memory):
     def crea_articolo(self, cr, uid, ids, context=None):
         #import pdb;pdb.set_trace()
         param = self.browse(cr, uid, ids)[0]
-        peso_art = param.peso_specifico * param.larg * param.lung * param.spess
+        peso_art = (param.peso_specifico * param.larg * param.lung * param.spess*2)/1000
         default_code = param.cod_busta.name.strip() + '-' + param.cod_var.name.strip() + '-' + str(param.larg) + 'x' + str(param.lung) + 'x' + str(param.spess)
         descr = param.cod_busta.descrizione.strip() + '-' + param.cod_var.name.strip() + str(param.larg) + 'x' + str(param.lung) + 'x' + str(param.spess)
         if param.marchio_ids:
@@ -163,11 +163,14 @@ class crea_buste(osv.osv_memory):
     
     
     def crea_distinta(self, cr, uid, ids, articolo_id, context=None):
-        #import pdb;pdb.set_trace()
+        
         articolo = self.pool.get('product.product').browse(cr, uid, articolo_id)
         param = self.browse(cr, uid, ids)[0]
         distinta_id = self.cerca_testa_distinta(cr, uid, articolo, context=None)
-        for rigamat in self.pool.get('buste.template.bom').browse(cr, uid, [param.cod_var.id]):
+	ids_comp = self.pool.get('buste.template.bom').search(cr,uid,[('name','=',param.cod_var.id)])
+	if ids_comp:
+         for rigamat in self.pool.get('buste.template.bom').browse(cr, uid, ids_comp):
+		#import pdb;pdb.set_trace()
                 # cerca in distinta base l'articolo componente  
                 cerca = [('bom_id', '=', distinta_id), ('active', '=', True), ('product_id', '=', rigamat.product_material_id.id)]
                 righe_comp = self.pool.get('mrp.bom').search(cr, uid, cerca)

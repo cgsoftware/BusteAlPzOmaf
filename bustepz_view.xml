@@ -94,6 +94,7 @@
 						<field name="larg" size="10"/>
 						<field name="lung" size="10"/>
 						<field name="spess" size="10"/>
+						<field name="cod_var"/>
 					<newline />
 					</page>
 		</notebook>

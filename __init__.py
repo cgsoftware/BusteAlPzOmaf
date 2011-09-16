@@ -20,8 +20,9 @@
 #
 ##############################################################################
 
-import product
+
 import BusteTemplate
 import wizard
+import product
 
 

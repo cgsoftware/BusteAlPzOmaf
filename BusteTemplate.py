@@ -157,7 +157,7 @@ class  buste_template_head(osv.osv):
       pool = pooler.get_pool(cr.dbname)  
       #import pdb;pdb.set_trace()
       testo_log = """Inizio procedura di Aggiornamento/Inserimento Varianti e Materie Prime su Template Buste """ + time.ctime() + '\n'
-      percorso = '/home/giuseppe/filecsv'
+      percorso = '/home/openerp/filecsv'
       partner_obj = pool.get('buste.template.head')
       if use_new_cursor:
         cr = pooler.get_db(use_new_cursor).cursor()
