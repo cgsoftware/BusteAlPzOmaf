@@ -43,6 +43,8 @@ class  buste_template_head(osv.osv):
     _columns = {
                 'name': fields.char('Codice', size=64, required=True, translate=True, select=True),
                 'descrizione': fields.char('Descrizione', size=128, required=False, translate=True, select=True),
+                'peso_specifico': fields.float('Peso Specifico', required=False, digits=(11, 5)),
+                'conai':fields.many2one('conai.cod', 'Codice Conai'),
                 # categoria obbligatoria sull'articolo e quindi diventa abbligatoria sul wizard di creazione dell'articolo
                 'categ_id': fields.many2one('product.category', 'Category', required=False, change_default=True, domain="[('type','=','normal')]" , help="Select category for the current product"),
                 'righe_varianti': fields.one2many('buste.template.varianti', 'codice_busta_id', 'Righe Varianti Busta'),

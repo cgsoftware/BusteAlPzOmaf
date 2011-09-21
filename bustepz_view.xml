@@ -38,6 +38,9 @@
 	    <field name="id" invisible="1" />
 	    <field name="descrizione" select="1" />	
 	    <field name='categ_id' required="1" />
+	    	    <newline/>
+	    <field name='peso_specifico' required="1" />
+	    <field name='conai' required="1" />
           </group>     
           <newline/>
           <separator string="Dettagli" colspan="4"/>
@@ -94,6 +97,7 @@
 						<field name="larg" size="10"/>
 						<field name="lung" size="10"/>
 						<field name="spess" size="10"/>
+						<field name='soff' size="10" />
 						<field name="cod_var"/>
 					<newline />
 					</page>

@@ -26,7 +26,7 @@
      Modifche Specifiche per la creazione delle Buste al Pz con creazione automatica Distinta Base e definizione prezzi di vendita
     """,
     'author': 'C & G Software',
-    "depends" : ['base', 'product'],
+    "depends" : ['base', 'product', 'Conai'],
     "update_xml" : [
                     'security/ir.model.access.csv',
                     'bustepz_view.xml',

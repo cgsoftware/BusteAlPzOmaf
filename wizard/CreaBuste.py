@@ -39,8 +39,10 @@ class crea_buste(osv.osv_memory):
                 'larg': fields.float('Larghezza', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
                 'lung': fields.float('Lunghezza', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
                 'spess': fields.float('Spessore', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
+                'soff': fields.float('Soffietto', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
                 'marchio_ids':fields.many2one('marchio.marchio', 'Marchio'),
                 'pz_x_collo': fields.integer('Pezzi Per Collo', required=False),
+                'conai':fields.many2one('conai.cod', 'Codice Conai'),
                 
                 }
     
@@ -48,9 +50,12 @@ class crea_buste(osv.osv_memory):
         vals = {}
         if cod_busta:
             categ_id = self.pool.get('buste.template.head').browse(cr, uid, cod_busta).categ_id.id
+            conai = self.pool.get('buste.template.head').browse(cr, uid, cod_busta).conai.id
             if categ_id:
                 vals = {
                         'categ_id':categ_id,
+                        'peso_specifico':self.pool.get('buste.template.head').browse(cr, uid, cod_busta).peso_specifico,
+                        'conai':conai,
                         }
         
         return {'value':vals}
@@ -58,7 +63,7 @@ class crea_buste(osv.osv_memory):
     def crea_articolo(self, cr, uid, ids, context=None):
         #import pdb;pdb.set_trace()
         param = self.browse(cr, uid, ids)[0]
-        peso_art = (param.peso_specifico * param.larg * param.lung * param.spess*2)/1000
+        peso_art = (param.peso_specifico * param.larg * (param.lung + param.soff * 2) * param.spess * 2) / 1000
         default_code = param.cod_busta.name.strip() + '-' + param.cod_var.name.strip() + '-' + str(param.larg) + 'x' + str(param.lung) + 'x' + str(param.spess)
         descr = param.cod_busta.descrizione.strip() + '-' + param.cod_var.name.strip() + str(param.larg) + 'x' + str(param.lung) + 'x' + str(param.spess)
         if param.marchio_ids:
@@ -70,17 +75,20 @@ class crea_buste(osv.osv_memory):
         prodotto = {
                     'default_code':default_code,
                     'codice_template':default_code,
+                    'conai':param.conai.id,
                     'name':descr,
                     'marchio_ids':marchio_id,
                     'peso_specifico': param.peso_specifico,
                     'larg':param.larg,
                     'lung':param.lung,
+                    'soff':param.soff,
                     'spess': param.spess,
                     'cod_var':param.cod_var.id,
                     'categ_id':param.categ_id.id,
                     'list_price':peso_art * param.cod_var.prezzo_al_kg,
                     'production_peso':peso_art,
                     'production_conai_peso':peso_art,
+                    'peso_prod':peso_art,
                     'pz_x_collo':param.pz_x_collo,
                     }
         id_articolo = self.pool.get('product.product').create(cr, uid, prodotto)
@@ -167,7 +175,7 @@ class crea_buste(osv.osv_memory):
         articolo = self.pool.get('product.product').browse(cr, uid, articolo_id)
         param = self.browse(cr, uid, ids)[0]
         distinta_id = self.cerca_testa_distinta(cr, uid, articolo, context=None)
-	ids_comp = self.pool.get('buste.template.bom').search(cr,uid,[('name','=',param.cod_var.id)])
+	ids_comp = self.pool.get('buste.template.bom').search(cr, uid, [('name', '=', param.cod_var.id)])
 	if ids_comp:
          for rigamat in self.pool.get('buste.template.bom').browse(cr, uid, ids_comp):
 		#import pdb;pdb.set_trace()

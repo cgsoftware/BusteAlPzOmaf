@@ -16,9 +16,12 @@
 		      <field name="peso_specifico" /> 
 		       <field name="larg" /> 
 			    <newline/>
-		        <field name="lung" /> 
+		        <field name="lung" />
+		        <field name="soff" /> 
+			    <newline/>		        
 			 <field name="spess" /> 		 		 
 			 <field name="pz_x_collo" /> 
+			 <field name="conai" />
                 </group>
                     <separator colspan="4"/>
  
@@ -31,9 +34,7 @@
             </field>
         </record>
 
-
-
-        <act_window name="Genera Articolo Busta"
+                <act_window name="Genera Articolo Busta"
             res_model="crea.buste"
             src_model="product.product"
             view_mode="form"
