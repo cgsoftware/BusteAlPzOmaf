@@ -36,10 +36,10 @@ class crea_buste(osv.osv_memory):
                 'categ_id': fields.many2one('product.category', 'Category', required=True, change_default=True, domain="[('type','=','normal')]" , help="Select category for the current product"),
                 'cod_var':fields.many2one('buste.template.varianti', 'Variante di Riferimento Busta', required=True, ondelete='cascade', select=True, readonly=False),
                 'peso_specifico': fields.float('Peso Specifico', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
-                'larg': fields.float('Larghezza', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
-                'lung': fields.float('Lunghezza', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
+                'larg': fields.float('Larghezza', required=True, digits=(11, 5), help="Misura in CM"),
+                'lung': fields.float('Lunghezza', required=True, digits=(11, 5), help="Misura in CM"),
                 'spess': fields.float('Spessore', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
-                'soff': fields.float('Soffietto', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
+                'soff': fields.float('Soffietto', required=True, digits=(11, 5), help="Misura in CM"),
                 'marchio_ids':fields.many2one('marchio.marchio', 'Marchio'),
                 'pz_x_collo': fields.integer('Pezzi Per Collo', required=False),
                 'conai':fields.many2one('conai.cod', 'Codice Conai'),
@@ -63,9 +63,9 @@ class crea_buste(osv.osv_memory):
     def crea_articolo(self, cr, uid, ids, context=None):
         #import pdb;pdb.set_trace()
         param = self.browse(cr, uid, ids)[0]
-        peso_art = (param.peso_specifico * param.larg * (param.lung + param.soff * 2) * param.spess * 2) / 1000
-        default_code = param.cod_busta.name.strip() + '-' + param.cod_var.name.strip() + '-' + str(param.larg) + 'x' + str(param.lung) + 'x' + str(param.spess)
-        descr = param.cod_busta.descrizione.strip() + '-' + param.cod_var.name.strip() + str(param.larg) + 'x' + str(param.lung) + 'x' + str(param.spess)
+        peso_art = (param.peso_specifico * param.lung * (param.larg + param.soff * 2) * param.spess / 1000 * 2) / 1000
+        default_code = param.cod_busta.name.strip() + '-' + param.cod_var.name.strip() + '-' + str(int(param.larg)) + '+' + str(int(param.soff)) + '+' + str(int(param.soff)) + 'x' + str(int(param.lung)) + 'x' + str(param.spess)
+        descr = param.cod_busta.descrizione.strip() + '-' + param.cod_var.name.strip() + '-' + str(int(param.larg)) + '+' + str(int(param.soff)) + '+' + str(int(param.soff)) + 'x' + str(int(param.lung)) + 'x' + str(param.spess)
         if param.marchio_ids:
             default_code = default_code + '-' + param.marchio_ids.name.strip()
             descr = descr + '-' + param.marchio_ids.name.strip()
@@ -91,7 +91,9 @@ class crea_buste(osv.osv_memory):
                     'peso_prod':peso_art,
                     'pz_x_collo':param.pz_x_collo,
                     }
+        # import pdb;pdb.set_trace()        
         id_articolo = self.pool.get('product.product').create(cr, uid, prodotto)
+
         ok = self.pool.get('product.product').write(cr, uid, [id_articolo], {'pz_x_collo':param.pz_x_collo})
         ok = self.crea_distinta(cr, uid, ids, id_articolo, context)
         context.update({'product_id':id_articolo})        
