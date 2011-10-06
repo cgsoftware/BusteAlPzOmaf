@@ -2,6 +2,7 @@
 <openerp>
   <data>
 
+  <menuitem name="Gestione Buste Al Pz " id="menu_buste_pz" parent="base.menu_base_partner"  icon="STOCK_OPEN"/>
 
     <record model="ir.actions.act_window" id="action_buste_template_form">
       <field name="name">Template Buste PZ</field>
@@ -10,7 +11,7 @@
     </record>
 
 
-    <menuitem action="action_buste_template_form" id="menu_buste_template_tree" parent="base.menu_product" />
+    <menuitem action="action_buste_template_form" id="menu_buste_template_tree" parent="menu_buste_pz" />
     
     <!-- Tree View  Numeri Progressivi Documenti -->
     
@@ -41,6 +42,8 @@
 	    	    <newline/>
 	    <field name='peso_specifico' required="1" />
 	    <field name='conai' required="1" />
+	    <field name='routing_id' required="1" />
+	    	    
           </group>     
           <newline/>
           <separator string="Dettagli" colspan="4"/>
@@ -75,6 +78,23 @@
 	    </form>
       </field>
       </page>
+      
+     	  <page string="Righe Costi Produzione">
+	    <field name="righe_costi" nolabel="1" mode="tree,form" string="Costi Produzione">
+            <tree editable="bottom"  string="Costi E Servizi">
+ 	      <field name="product_id" size='150' />
+	      <field name="product_qty" size='150' /> 
+
+            </tree>
+            <form>
+ 	      <field name="product_id" size='150' />
+	      <field name="product_qty" size='150' /> 
+	    </form>
+      </field>
+      </page>
+      
+      
+      
     </notebook>
   </form>
   </field>

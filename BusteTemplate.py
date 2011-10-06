@@ -37,6 +37,9 @@ import os
 import re
 
 
+
+
+
 class  buste_template_head(osv.osv):
     _description = 'Template per la creazione degli articoli busta al peso'
     _name = "buste.template.head"
@@ -45,10 +48,12 @@ class  buste_template_head(osv.osv):
                 'descrizione': fields.char('Descrizione', size=128, required=False, translate=True, select=True),
                 'peso_specifico': fields.float('Peso Specifico', required=False, digits=(11, 5)),
                 'conai':fields.many2one('conai.cod', 'Codice Conai'),
+                'routing_id': fields.many2one('mrp.routing', 'Routing', reqired=True, help="TLinea di Produzione"),
                 # categoria obbligatoria sull'articolo e quindi diventa abbligatoria sul wizard di creazione dell'articolo
                 'categ_id': fields.many2one('product.category', 'Category', required=False, change_default=True, domain="[('type','=','normal')]" , help="Select category for the current product"),
                 'righe_varianti': fields.one2many('buste.template.varianti', 'codice_busta_id', 'Righe Varianti Busta'),
                 'righe_materie_prime':fields.one2many('buste.template.bom', 'codice_busta_id', 'Righe Materie Prime Busta'),
+                'righe_costi':fields.one2many('buste.bom.template', 'codice_busta_id', 'Righe Costi Busta'),
 
                 }
 
@@ -200,7 +205,18 @@ class  buste_template_head(osv.osv):
     
 buste_template_head()
 
-
+class  buste_bom_template(osv.osv):
+    _description = 'Materie prime definite a livello di template Buste'
+    pass
+    _name = "buste.bom.template"
+    _columns = {
+                'codice_busta_id': fields.many2one('buste.template.head', 'Testa Template Busta', required=True, ondelete='cascade', select=True, readonly=True),
+                'product_id': fields.many2one('product.product', 'Servizio/Costo', domain=[('type', '=', 'service')], required=True, ondelete='cascade', select=True),
+                'product_qty': fields.float('Product Qty', required=False, digits=(11, 5)),
+                }
+    
+    
+buste_bom_template()
 
 class  buste_template_varianti(osv.osv):
     _description = 'Varianti che la busta può assumere'

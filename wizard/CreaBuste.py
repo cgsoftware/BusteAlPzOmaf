@@ -90,6 +90,7 @@ class crea_buste(osv.osv_memory):
                     'production_conai_peso':peso_art,
                     'peso_prod':peso_art,
                     'pz_x_collo':param.pz_x_collo,
+                    'routing_id':param.cod_busta.routing_id.id,
                     }
         # import pdb;pdb.set_trace()        
         id_articolo = self.pool.get('product.product').create(cr, uid, prodotto)
@@ -126,6 +127,7 @@ class crea_buste(osv.osv_memory):
                                'product_id':articolo_id.id,
                                'bom_id':0,
                                'product_uom': articolo_id.uom_id.id,
+                               'routing_id':articolo_id.product_tmpl_id.routing_id.id,
                                }
             testa_id = self.pool.get('mrp.bom').create(cr, uid, testa_distinta)
 
@@ -170,21 +172,60 @@ class crea_buste(osv.osv_memory):
                                }
                     riga_dist_id = self.pool.get('mrp.bom').create(cr, uid, riga_distinta)
                     return [riga_dist_id]
+
+    def scrive_componente_distinta2(self, cr, uid, righe_comp, rigamat, testa_id, articolo, context=None):
+                #import pdb;pdb.set_trace()
+                product = self.pool.get('product.product').browse(cr, uid, rigamat.product_id.id)
+                if righe_comp:
+                    # c'è la riga deve fare update
+                    riga_distinta = {
+                               'name':product.name,
+                               'code':'',
+                               'product_id':product.id,
+                               'bom_id':testa_id,
+                               'type':'normal',
+                               'product_uom': product.uom_id.id,
+                               'product_qty':rigamat.product_qty,
+                               }
+                    riga_dist_id = self.pool.get('mrp.bom').write(cr, uid, righe_comp, riga_distinta)
+                    return righe_comp
+
+                else:
+                    riga_distinta = {
+                               'name':product.name,
+                               'code':'',
+                               'product_id':product.id,
+                               'bom_id':testa_id,
+                               'type':'normal',
+                               'product_uom': product.uom_id.id,
+                               'product_qty':rigamat.product_qty,
+                               }
+                    riga_dist_id = self.pool.get('mrp.bom').create(cr, uid, riga_distinta)
+                    return [riga_dist_id]
     
     
     def crea_distinta(self, cr, uid, ids, articolo_id, context=None):
-        
         articolo = self.pool.get('product.product').browse(cr, uid, articolo_id)
+        
         param = self.browse(cr, uid, ids)[0]
+        
         distinta_id = self.cerca_testa_distinta(cr, uid, articolo, context=None)
-	ids_comp = self.pool.get('buste.template.bom').search(cr, uid, [('name', '=', param.cod_var.id)])
-	if ids_comp:
-         for rigamat in self.pool.get('buste.template.bom').browse(cr, uid, ids_comp):
-		#import pdb;pdb.set_trace()
+        
+        ids_comp = self.pool.get('buste.template.bom').search(cr, uid, [('name', '=', param.cod_var.id)])
+            
+        if ids_comp: 
+           for rigamat in self.pool.get('buste.template.bom').browse(cr, uid, ids_comp):
+		             #import pdb;pdb.set_trace()
                 # cerca in distinta base l'articolo componente  
                 cerca = [('bom_id', '=', distinta_id), ('active', '=', True), ('product_id', '=', rigamat.product_material_id.id)]
                 righe_comp = self.pool.get('mrp.bom').search(cr, uid, cerca)
                 ids_riga = self.scrive_componente_distinta(cr, uid, righe_comp, rigamat, distinta_id, articolo, context=None)
+        if param.cod_busta.righe_costi:
+           for rigamat in  param.cod_busta.righe_costi:
+                cerca = [('bom_id', '=', distinta_id), ('active', '=', True), ('product_id', '=', rigamat.product_id.id)]
+                righe_comp = self.pool.get('mrp.bom').search(cr, uid, cerca)
+                ids_riga = self.scrive_componente_distinta2(cr, uid, righe_comp, rigamat, distinta_id, articolo, context=None)
+      
             
         return True
 
