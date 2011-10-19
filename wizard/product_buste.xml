@@ -21,6 +21,9 @@
 			    <newline/>		        
 			 <field name="spess" /> 		 		 
 			 <field name="pz_x_collo" /> 
+			 <newline></newline>
+                    <field name="adhoc_code"/>
+			 
 			 <field name="conai" />
                 </group>
                     <separator colspan="4"/>

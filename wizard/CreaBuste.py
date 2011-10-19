@@ -43,6 +43,7 @@ class crea_buste(osv.osv_memory):
                 'marchio_ids':fields.many2one('marchio.marchio', 'Marchio'),
                 'pz_x_collo': fields.integer('Pezzi Per Collo', required=False),
                 'conai':fields.many2one('conai.cod', 'Codice Conai'),
+                'adhoc_code': fields.char('Cod.Art.Ad-Hoc', size=15),
                 
                 }
     
@@ -90,6 +91,7 @@ class crea_buste(osv.osv_memory):
                     'production_conai_peso':peso_art,
                     'peso_prod':peso_art,
                     'pz_x_collo':param.pz_x_collo,
+                    'adhoc_code': param.adhoc_code,
                     'routing_id':param.cod_busta.routing_id.id,
                     }
         # import pdb;pdb.set_trace()        
