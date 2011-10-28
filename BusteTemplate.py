@@ -96,7 +96,7 @@ class  buste_template_head(osv.osv):
                                         'prezzo_al_kg':riga[3].replace(',', '.'),
                                         
                                         }
-                            ok = self.pool.get('buste.template.varianti').write(cr, uid, variante)
+                            ok = self.pool.get('buste.template.varianti').write(cr, uid,righe_var_ids, variante)
                             #trovata la riga cambia il prezzo
                             aggiornati = aggiornati + 1  
                         else:
@@ -134,7 +134,7 @@ class  buste_template_head(osv.osv):
                                                'tipo_calcolo':riga[3],
                                                'moltip':riga[4].replace(',', '.'),
                                                }
-                                    ok = BusteBom.write(cr, uid, materia)
+                                    ok = BusteBom.write(cr, uid,id_bom, materia)
                                     aggiornati = aggiornati + 1
                                 else:
                                     #inserisce
