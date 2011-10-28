@@ -177,6 +177,7 @@ class crea_buste(osv.osv_memory):
 
     def scrive_componente_distinta2(self, cr, uid, righe_comp, rigamat, testa_id, articolo, context=None):
                 #import pdb;pdb.set_trace()
+                qty = articolo.production_conai_peso * rigamat.moltip
                 product = self.pool.get('product.product').browse(cr, uid, rigamat.product_id.id)
                 if righe_comp:
                     # c'è la riga deve fare update
