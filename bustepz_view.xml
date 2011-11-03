@@ -119,6 +119,9 @@
 						<field name="spess" size="10"/>
 						<field name='soff' size="10" />
 						<field name="cod_var"/>
+						<field name="patt" size="10"/>
+						<field name="minigrip" size="10"/>
+						<field name="microforatura" size="10"/>
 					<newline />
 					</page>
 		</notebook>

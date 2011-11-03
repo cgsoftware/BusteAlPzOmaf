@@ -39,6 +39,10 @@ class product_product(osv.osv):
         'lung': fields.float('Lunghezza', required=False, digits=(11, 5)),
         'spess': fields.float('Spessore', required=False, digits=(11, 5)),
         'soff': fields.float('Soffietto', required=False, digits=(11, 5)),
+        'patt': fields.float('Pattina', required=False, digits=(11, 5), help="Misura in CM"),
+        'minigrip': fields.float('Minigrip', required=False, digits=(11, 5), help="Misura in CM"),
+        'microforatura': fields.char('Microforatura', size=6),        
+        
         'cod_var':fields.many2one('buste.template.varianti', 'Variante di Riferimento Busta', required=False, ondelete='cascade', select=True, readonly=True),
          }
     

@@ -17,12 +17,15 @@
 		       <field name="larg" /> 
 			    <newline/>
 		        <field name="lung" />
+		        <field name="patt" />
 		        <field name="soff" /> 
-			    <newline/>		        
+			    <newline/>		
+			  <field name="minigrip" />           
 			 <field name="spess" /> 		 		 
 			 <field name="pz_x_collo" /> 
 			 <newline></newline>
                     <field name="adhoc_code"/>
+                   <field name="microforatura"/>
 			 
 			 <field name="conai" />
                 </group>
