@@ -1,24 +1,5 @@
 # -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2008 Tiny SPRL (<http://tiny.be>). All Rights Reserved
-#    $Id$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 
 import decimal_precision as dp
 import time
@@ -240,7 +221,7 @@ class  buste_template_bom(osv.osv):
                 'name':fields.many2one('buste.template.varianti', 'Variante di Riferimento Busta', required=True, ondelete='cascade', select=True, readonly=False),
                 'codice_busta_id':fields.related('name', 'codice_busta_id', string="Codice Busta", type='integer', store=True),
                 'product_material_id': fields.many2one('product.product', 'Materia Prima', required=True, ondelete='cascade', select=True),
-                'tipo_calcolo': fields.selection([('P', 'Peso'), ('LARG', 'Larghezza'), ('LUNG', 'Lungezza')], 'Tipo Calcolo', required=True, help="Indica quale dimensione sarà utilizzata per il calcolo del consume della materia prima"),
+                'tipo_calcolo': fields.selection([('C','Calcolo Colli'),('P', 'Peso'), ('LARG', 'Larghezza'), ('LUNG', 'Lungezza')], 'Tipo Calcolo', required=True, help="Indica quale dimensione sarà utilizzata per il calcolo del consume della materia prima"),
                 'moltip': fields.float('Moltiplicatore', required=True, digits=(11, 5), help=" se Tipo Calcolo = Peso prende il peso definito dalle dimensioni e lo moltiplica per questo valore e otteniamo la qta da scaricare in distinta base"),
                 
                 }

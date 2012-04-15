@@ -40,13 +40,13 @@ class crea_buste(osv.osv_memory):
                 'lung': fields.float('Lunghezza', required=True, digits=(11, 5), help="Misura in CM"),
                 'patt': fields.float('Pattina', required=True, digits=(11, 5), help="Misura in CM"),
                 'minigrip': fields.float('Minigrip', required=True, digits=(11, 5), help="Misura in CM"),
-                'spess': fields.float('Spessore', required=True, digits=(11, 5), help="1 = valore neutro nella motiplicazione"),
+                'spess': fields.float('Spessore', required=True, digits=(11, 5), help="Misura in MY"),
                 'soff': fields.float('Soffietto', required=True, digits=(11, 5), help="Misura in CM"),
                 'marchio_ids':fields.many2one('marchio.marchio', 'Marchio'),
                 'pz_x_collo': fields.integer('Pezzi Per Collo', required=False),
                 'conai':fields.many2one('conai.cod', 'Codice Conai'),
                 'adhoc_code': fields.char('Cod.Art.Ad-Hoc', size=15),
-                'microforatura': fields.char('Microforatura', size=6),
+                'microforatura': fields.boolean('Microforatura'),   
                 
                 }
     
@@ -67,8 +67,8 @@ class crea_buste(osv.osv_memory):
     def crea_articolo(self, cr, uid, ids, context=None):
         #import pdb;pdb.set_trace()
         param = self.browse(cr, uid, ids)[0]
-        default_code = param.cod_busta.name.strip() + '-' + param.cod_var.name.strip() + '-' + str(int(param.larg)) + '+' + str(int(param.soff)) + '+' + str(int(param.soff)) + 'x' + str(int(param.lung)) + 'x' + str(param.spess) 
-        descr = param.cod_busta.descrizione.strip() + '-' + param.cod_var.name.strip() + '-' + str(int(param.larg)) + '+' + str(int(param.soff)) + '+' + str(int(param.soff)) + 'x' + str(int(param.lung)) + 'x' + str(param.spess)
+        default_code = param.cod_busta.name.strip() + '-' + param.cod_var.name.strip() + '-' + str(int(param.larg)) + '+' + str(int(param.soff)) + '+' + str(int(param.soff)) + 'x' + str(int(param.lung)) + 'xMY' + str(int(param.spess)) 
+        descr = param.cod_busta.descrizione.strip() + '-' + param.cod_var.name.strip() + '-' + str(int(param.larg)) + '+' + str(int(param.soff)) + '+' + str(int(param.soff)) + 'x' + str(int(param.lung)) + 'xMY' + str(int(param.spess))
         if param.patt:
            default_code = default_code + '-Pat.' +  str(int(param.patt))
            descr = descr + '-' + ' Pattina' +  str(int(param.patt))
@@ -77,21 +77,19 @@ class crea_buste(osv.osv_memory):
         if param.minigrip:
            default_code = default_code + '-Mini.' +  str(int(param.minigrip))
            descr = descr + '-' + ' Minigrip' +  str(int(param.minigrip))
+        if param.microforatura:
+            default_code = default_code + '-MICF'
+            descr = descr + '-MICF'
         if param.marchio_ids:
             default_code = default_code + '-' + param.marchio_ids.name.strip()
             descr = descr + '-' + param.marchio_ids.name.strip()
-        
-
-        if param.microforatura:
-            default_code = default_code + '-' + param.microforatura.strip()
-            descr = descr + '-' + param.microforatura.strip()
             marchio_id = param.marchio_ids.id
         else:
             marchio_id = False
         peso_art = (param.peso_specifico * (param.lung+(param.patt/2)) * (param.larg + param.soff * 2) * param.spess / 1000 * 2) / 1000
         prodotto = {
-                    'default_code':default_code,
-                    'codice_template':default_code,
+                    'default_code':False,
+                    'codice_template':param.cod_busta.name,
                     'conai':param.conai.id,
                     'name':descr,
                     'marchio_ids':marchio_id,
@@ -113,7 +111,7 @@ class crea_buste(osv.osv_memory):
                     'adhoc_code': param.adhoc_code,
                     'routing_id':param.cod_busta.routing_id.id,
                     }
-        # import pdb;pdb.set_trace()        
+        #import pdb;pdb.set_trace()        
         id_articolo = self.pool.get('product.product').create(cr, uid, prodotto)
 
         ok = self.pool.get('product.product').write(cr, uid, [id_articolo], {'pz_x_collo':param.pz_x_collo})
@@ -165,6 +163,9 @@ class crea_buste(osv.osv_memory):
                     qty = articolo.larg * rigamat.moltip
                 if rigamat.tipo_calcolo == 'LUNG':
                     qty = articolo.lung * rigamat.moltip
+                if rigamat.tipo_calcolo == 'C':
+                    qty = rigamat.moltip/articolo.pz_x_collo
+                
 
                 product = self.pool.get('product.product').browse(cr, uid, rigamat.product_material_id.id)
                 if righe_comp:

@@ -41,7 +41,7 @@ class product_product(osv.osv):
         'soff': fields.float('Soffietto', required=False, digits=(11, 5)),
         'patt': fields.float('Pattina', required=False, digits=(11, 5), help="Misura in CM"),
         'minigrip': fields.float('Minigrip', required=False, digits=(11, 5), help="Misura in CM"),
-        'microforatura': fields.char('Microforatura', size=6),        
+        'microforatura': fields.boolean('Microforatura'),        
         
         'cod_var':fields.many2one('buste.template.varianti', 'Variante di Riferimento Busta', required=False, ondelete='cascade', select=True, readonly=True),
          }
